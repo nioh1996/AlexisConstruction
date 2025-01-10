@@ -1,0 +1,36 @@
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.AssemblyReference.cache
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.BookingsPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.ClientPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.CreateEditForm.resources
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainMenu.resources
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.ServicesPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.GenerateResource.cache
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CoreCompileInputs.cache
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+D:\ProjectInfosoft\AlexisConstructionServices-master - Copy\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.AssemblyReference.cache
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.BookingsPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.ClientPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.CreateEditForm.resources
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainMenu.resources
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.ServicesPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.GenerateResource.cache
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CoreCompileInputs.cache
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+D:\ProjectInfosoft\AlexisConstructionServices1\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.AssemblyReference.cache
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.BookingsPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.ClientPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.CreateEditForm.resources
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.MainMenu.resources
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.ServicesPage.resources
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.GenerateResource.cache
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CoreCompileInputs.cache
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+D:\ProjectInfosoft\AlexisConstructionServices_JIMENEZ\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
