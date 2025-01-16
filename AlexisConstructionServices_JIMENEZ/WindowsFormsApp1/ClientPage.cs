@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using WindowsFormsApp1.Repositories;
@@ -22,12 +22,7 @@ namespace WindowsFormsApp1
             try
             {
                 var clients = _repository.GetClients();
-
-                DataTable dataTable = new DataTable();
-                dataTable.Columns.Add("ClientID", typeof(int));
-                dataTable.Columns.Add("Name", typeof(string));
-                dataTable.Columns.Add("Contact", typeof(string));
-                dataTable.Columns.Add("Address", typeof(string));
+                var dataTable = CreateClientsDataTable();
 
                 foreach (var client in clients)
                 {
@@ -43,8 +38,18 @@ namespace WindowsFormsApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading clients: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage("Error loading clients", ex);
             }
+        }
+
+        private static DataTable CreateClientsDataTable()
+        {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("ClientID", typeof(int));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("Contact", typeof(string));
+            dataTable.Columns.Add("Address", typeof(string));
+            return dataTable;
         }
 
         private void btnAddClient_Click(object sender, EventArgs e)
@@ -60,14 +65,11 @@ namespace WindowsFormsApp1
 
         private void btnEditClient_Click(object sender, EventArgs e)
         {
-            if (ClientsTable.SelectedRows.Count == 0)
+            if (!TryGetSelectedClientId(out int clientId))
             {
                 MessageBox.Show("Please select a client to edit.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            var selectedRow = ClientsTable.SelectedRows[0];
-            int clientId = Convert.ToInt32(selectedRow.Cells["ClientID"].Value);
 
             try
             {
@@ -91,20 +93,17 @@ namespace WindowsFormsApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error editing client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage("Error editing client", ex);
             }
         }
 
         private void btnDeleteClient_Click(object sender, EventArgs e)
         {
-            if (ClientsTable.SelectedRows.Count == 0)
+            if (!TryGetSelectedClientId(out int clientId))
             {
                 MessageBox.Show("Please select a client to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            var selectedRow = ClientsTable.SelectedRows[0];
-            int clientId = Convert.ToInt32(selectedRow.Cells["ClientID"].Value);
 
             var confirmResult = MessageBox.Show("Are you sure you want to delete this client?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -118,9 +117,28 @@ namespace WindowsFormsApp1
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error deleting client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ShowErrorMessage("Error deleting client", ex);
                 }
             }
+        }
+
+        private bool TryGetSelectedClientId(out int clientId)
+        {
+            clientId = -1;
+
+            if (ClientsTable.SelectedRows.Count == 0)
+            {
+                return false;
+            }
+
+            var selectedRow = ClientsTable.SelectedRows[0];
+            clientId = Convert.ToInt32(selectedRow.Cells["ClientID"].Value);
+            return true;
+        }
+
+        private void ShowErrorMessage(string title, Exception ex)
+        {
+            MessageBox.Show($"{title}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
