@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using WindowsFormsApp1.Models;
 using WindowsFormsApp1.Repositories;
 
@@ -15,78 +7,99 @@ namespace WindowsFormsApp1
 {
     public partial class CreateEditForm : Form
     {
+        private int _clientId;
+
         public CreateEditForm()
         {
             InitializeComponent();
-            
-            this.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
         }
 
-        private int clientId = 0;
         public void EditClient(Client client)
         {
-            
-            MessageBox.Show($"Editing Client - ID: {client.ClientID}, Name: {client.Name}, Contact: {client.Contact}, Address: {client.Address}");
+            if (client == null) throw new ArgumentNullException(nameof(client));
 
-            this.Text = "Edit Client";
-            this.lbTitle.Text = "Edit Client";
+            Text = "Edit Client";
+            lbTitle.Text = "Edit Client";
 
-          
-            this.lbclient.Text = client.ClientID.ToString();
-            this.Nametb.Text = client.Name;
-            this.Addresstb.Text = client.Address;
-            this.Contacttb.Text = client.Contact;
+            lbclient.Text = client.ClientID.ToString();
+            Nametb.Text = client.Name;
+            Addresstb.Text = client.Address;
+            Contacttb.Text = client.Contact;
 
-            // Store the client ID for later use when saving
-            this.clientId = client.ClientID;
-
-        }
-
-        private void clientsBindingNavigatorSaveItem_Click(object sender, EventArgs e)
-        {
-            this.Validate();
-            this.clientsBindingSource.EndEdit();
-            this.tableAdapterManager.UpdateAll(this.alexisconstructionDBDataSet);
-
+            _clientId = client.ClientID;
         }
 
         private void CreateEditForm_Load(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the 'alexisconstructionDBDataSet.Clients' table. You can move, or remove it, as needed.
-            this.clientsTableAdapter.Fill(this.alexisconstructionDBDataSet.Clients);
-
+            // Uncomment if data loading is required
+            // this.clientsTableAdapter.Fill(this.alexisconstructionDBDataSet.Clients);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Client client = new Client();
-            client.ClientID = this.clientId;
-            client.Name = this.Nametb.Text;
-            client.Contact = this.Contacttb.Text;
-            client.Address = this.Addresstb.Text;
-
-            if (string.IsNullOrEmpty(Nametb.Text) && string.IsNullOrEmpty(Contacttb.Text) && string.IsNullOrEmpty(Addresstb.Text))
+            if (!ValidateInputs(out string validationMessage))
             {
-                MessageBox.Show("There are empty fields. Please enter a Fill the Values.");
+                MessageBox.Show(validationMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var repo = new Clientrepository();
-            if (client.ClientID==0)
+            var client = new Client
             {
-                repo.CreateClient(client);
-            }
-            else
-            {
-                repo.UpdateClient(client);
-            }
+                ClientID = _clientId,
+                Name = Nametb.Text,
+                Contact = Contacttb.Text,
+                Address = Addresstb.Text
+            };
 
-            this.DialogResult= DialogResult.OK;
+            var repo = new ClientRepository();
+
+            try
+            {
+                if (client.ClientID == 0)
+                {
+                    repo.CreateClient(client);
+                }
+                else
+                {
+                    repo.UpdateClient(client);
+                }
+
+                DialogResult = DialogResult.OK;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
+        }
+
+        private bool ValidateInputs(out string validationMessage)
+        {
+            if (string.IsNullOrWhiteSpace(Nametb.Text))
+            {
+                validationMessage = "Name field cannot be empty.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(Contacttb.Text))
+            {
+                validationMessage = "Contact field cannot be empty.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(Addresstb.Text))
+            {
+                validationMessage = "Address field cannot be empty.";
+                return false;
+            }
+
+            validationMessage = string.Empty;
+            return true;
         }
     }
 }
