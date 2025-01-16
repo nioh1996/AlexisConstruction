@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using WindowsFormsApp1.Models;
@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
     public partial class ServicesPage : Form
     {
         private readonly ServicesRepository _repository;
-        private int _selectedServiceId = 0;
+        private int _selectedServiceId;
 
         public ServicesPage()
         {
@@ -24,11 +24,7 @@ namespace WindowsFormsApp1
             try
             {
                 var services = _repository.GetServices();
-
-                DataTable dataTable = new DataTable();
-                dataTable.Columns.Add("ServiceID", typeof(int));
-                dataTable.Columns.Add("ServiceName", typeof(string));
-                dataTable.Columns.Add("HourlyRate", typeof(decimal));
+                var dataTable = CreateServicesDataTable();
 
                 foreach (var service in services)
                 {
@@ -43,15 +39,24 @@ namespace WindowsFormsApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading services: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage("Error loading services", ex);
             }
+        }
+
+        private static DataTable CreateServicesDataTable()
+        {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("ServiceID", typeof(int));
+            dataTable.Columns.Add("ServiceName", typeof(string));
+            dataTable.Columns.Add("HourlyRate", typeof(decimal));
+            return dataTable;
         }
 
         private void btnAddService_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(Servicetb.Text) || string.IsNullOrWhiteSpace(HourlyRatetb.Text))
+            if (!ValidateInputs(out string validationMessage))
             {
-                MessageBox.Show("All fields must be filled.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(validationMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -80,35 +85,32 @@ namespace WindowsFormsApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving service: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage("Error saving service", ex);
             }
         }
 
         private void btnDeleteService_Click(object sender, EventArgs e)
         {
-            if (ServicesTable.SelectedRows.Count == 0)
+            if (!TryGetSelectedServiceId(out int serviceId))
             {
                 MessageBox.Show("Please select a row to delete.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            try
+            var confirmResult = MessageBox.Show("Are you sure you want to delete this service?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (confirmResult == DialogResult.Yes)
             {
-                var selectedRow = ServicesTable.SelectedRows[0];
-                int serviceId = Convert.ToInt32(selectedRow.Cells["ServiceID"].Value);
-
-                var confirmResult = MessageBox.Show("Are you sure you want to delete this service?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (confirmResult == DialogResult.Yes)
+                try
                 {
                     _repository.DeleteService(serviceId);
                     MessageBox.Show("Service deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadServices();
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error deleting service: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                catch (Exception ex)
+                {
+                    ShowErrorMessage("Error deleting service", ex);
+                }
             }
         }
 
@@ -128,6 +130,43 @@ namespace WindowsFormsApp1
             _selectedServiceId = 0;
             Servicetb.Clear();
             HourlyRatetb.Clear();
+        }
+
+        private bool ValidateInputs(out string validationMessage)
+        {
+            if (string.IsNullOrWhiteSpace(Servicetb.Text))
+            {
+                validationMessage = "Service name is required.";
+                return false;
+            }
+
+            if (!decimal.TryParse(HourlyRatetb.Text, out _))
+            {
+                validationMessage = "Hourly rate must be a valid number.";
+                return false;
+            }
+
+            validationMessage = string.Empty;
+            return true;
+        }
+
+        private bool TryGetSelectedServiceId(out int serviceId)
+        {
+            serviceId = -1;
+
+            if (ServicesTable.SelectedRows.Count == 0)
+            {
+                return false;
+            }
+
+            var selectedRow = ServicesTable.SelectedRows[0];
+            serviceId = Convert.ToInt32(selectedRow.Cells["ServiceID"].Value);
+            return true;
+        }
+
+        private void ShowErrorMessage(string title, Exception ex)
+        {
+            MessageBox.Show($"{title}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
