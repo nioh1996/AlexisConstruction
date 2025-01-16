@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using WindowsFormsApp1.Models;
@@ -23,12 +23,7 @@ namespace WindowsFormsApp1
             {
                 var bookings = _repository.GetBookings();
 
-                DataTable dataTable = new DataTable();
-                dataTable.Columns.Add("BookingID", typeof(int));
-                dataTable.Columns.Add("ClientName", typeof(string));
-                dataTable.Columns.Add("BookingDate", typeof(DateTime));
-                dataTable.Columns.Add("TotalAmount", typeof(decimal));
-
+                var dataTable = CreateBookingsDataTable();
                 foreach (var booking in bookings)
                 {
                     var row = dataTable.NewRow();
@@ -43,45 +38,91 @@ namespace WindowsFormsApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading bookings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage("Error loading bookings", ex);
             }
+        }
+
+        private static DataTable CreateBookingsDataTable()
+        {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("BookingID", typeof(int));
+            dataTable.Columns.Add("ClientName", typeof(string));
+            dataTable.Columns.Add("BookingDate", typeof(DateTime));
+            dataTable.Columns.Add("TotalAmount", typeof(decimal));
+            return dataTable;
         }
 
         private void btnAddBooking_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ClientTb.Text) || string.IsNullOrWhiteSpace(totalamounttb.Text))
+            if (IsInputValid(out string validationError))
             {
-                MessageBox.Show("Please fill in all required fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                Booking booking = new Booking
+                try
                 {
-                    ClientID = int.Parse(ClientTb.Text),
-                    BookingDate = datetimepickertb.Value,
-                    TotalAmount = decimal.Parse(totalamounttb.Text)
-                };
+                    var booking = new Booking
+                    {
+                        ClientID = int.Parse(ClientTb.Text),
+                        BookingDate = datetimepickertb.Value,
+                        TotalAmount = decimal.Parse(totalamounttb.Text)
+                    };
 
-                _repository.CreateBooking(booking);
-                MessageBox.Show("Booking added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _repository.CreateBooking(booking);
+                    MessageBox.Show("Booking added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                LoadBookings();
+                    LoadBookings();
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Invalid input format. Please check your entries.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorMessage("Error adding booking", ex);
+                }
             }
-            catch (FormatException)
+            else
             {
-                MessageBox.Show("Invalid input format. Please check your entries.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(validationError, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            catch (Exception ex)
+        }
+
+        private bool IsInputValid(out string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(ClientTb.Text))
             {
-                MessageBox.Show($"Error adding booking: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                errorMessage = "Client ID is required.";
+                return false;
             }
+
+            if (string.IsNullOrWhiteSpace(totalamounttb.Text))
+            {
+                errorMessage = "Total Amount is required.";
+                return false;
+            }
+
+            if (!int.TryParse(ClientTb.Text, out _))
+            {
+                errorMessage = "Client ID must be a valid number.";
+                return false;
+            }
+
+            if (!decimal.TryParse(totalamounttb.Text, out _))
+            {
+                errorMessage = "Total Amount must be a valid decimal number.";
+                return false;
+            }
+
+            errorMessage = string.Empty;
+            return true;
+        }
+
+        private void ShowErrorMessage(string title, Exception ex)
+        {
+            MessageBox.Show($"{title}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void BookingsPage_Load(object sender, EventArgs e)
         {
-            // This line is commented but could be re-enabled if needed to load data.
+            // Uncomment and configure as needed
             // this.bookingsTableAdapter.Fill(this.alexisconstructionDBDataSet.Bookings);
         }
 
@@ -95,7 +136,7 @@ namespace WindowsFormsApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving changes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage("Error saving changes", ex);
             }
         }
     }
